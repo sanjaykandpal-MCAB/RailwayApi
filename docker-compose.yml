@@ -1,0 +1,76 @@
+services:
+  frontend:
+    image: sanjaykandpal07/my-frontend-app:v1.0.0
+    ports:
+      - "80:80"
+    networks:
+      - micro
+
+  read-only-service:
+    image: sanjaykandpal07/read-only-service:latest
+    ports:
+      - "5009:5009"
+    environment:
+      - MONGO_URI=${MONGO_URI_PRODUCT}
+    depends_on:
+      - mongo
+    networks:
+      - micro
+  add-service:
+    image: sanjaykandpal07/add-service:latest
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=${MONGO_URI_PRODUCT}
+    depends_on:
+      - mongo
+    networks:
+      - micro
+
+  delete-service:
+    image: sanjaykandpal07/delete-service:latest
+    ports:
+      - "5002:5002"
+    environment:
+      - MONGO_URI=${MONGO_URI_PRODUCT}
+    depends_on:
+      - mongo
+    networks:
+      - micro
+
+  update-service:
+    image: sanjaykandpal07/update-service:latest
+    ports:
+      - "5003:5003"
+    environment:
+      - MONGO_URI=${MONGO_URI_PRODUCT}
+    depends_on:
+      - mongo
+    networks:
+      - micro
+
+  read-service:
+    image: sanjaykandpal07/read-service:latest
+    ports:
+      - "5004:5004"
+    environment:
+      - MONGO_URI=${MONGO_URI_PRODUCT}
+    depends_on:
+      - mongo
+    networks:
+      - micro
+
+  mongo:
+    image: sanjaykandpal07/mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    env_file:
+      - .env
+    networks:
+      - micro
+
+networks:
+  micro:
+    driver: bridge
